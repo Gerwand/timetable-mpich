@@ -1,0 +1,182 @@
+>CLASSES:
+1A
+1B
+1C
+1D
+2A
+2B
+2C
+2D
+3A
+3B
+3C
+3D
+
+>ROOMS:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+Sala gimnastyczna
+
+>TEACHERS:
+Adam Miskiewicz
+Eliza Orzeszek
+Tadeusz Hosciuszko
+Wladyslaw Kozaczek
+Mikolaj Koperek
+Stefan Banal
+Maria Klodowska
+Jan Heleniusz
+Jozef Sudzki
+Karol Wojchudla
+Kazimierz Mniejszy
+Zbigniew Karpowski
+Karol Balwin
+Krzysztof Kulomb
+Wanda Wasiliwka
+
+>SUBJECTS:
+MatematykaKop;Mikolaj Koperek;1
+MatematykaBan;Stefan Banal;1
+PolskiMis;Adam Miskiewicz;5
+PolskiOrz;Eliza Orzeszek;6
+WFHos;Tadeusz Hosciuszko;Sala gimnastyczna
+WFKoz;Wladyslaw Kozaczek;Sala gimnastyczna
+ChemiaKlo;Maria Klodowska;4
+FizykaHel;Jan Heleniusz;2
+FizykaKop;Mikolaj Koperek;2
+POSud;Jozef Sudzki;8
+POMni;Kazimierz Mniejszy;5
+ReligiaWoj;Karol Wojchudla;7
+HistoriaMni;Kazimierz Mniejszy;3
+HistoriaHos;Tadeusz Hosciuszko;3
+BiologiaBal;Karol Balwin;11
+GeografiaKul;Krzysztof Kulomb;10
+RosyjskiWas;Wanda Wasiliwka;12
+InformatykaKar;Zbigniew Karpowski;13
+InformatykaBan;Stefan Banal;14
+
+>TUPLES:
+1A;MatematykaKop
+1A;MatematykaKop
+1A;PolskiMis
+1A;PolskiMis
+1A;WFKoz
+1A;WFKoz
+1A;GeografiaKul
+1A;POMni
+1A;InformatykaBan
+1A;InformatykaBan
+1B;MatematykaKop
+1B;MatematykaKop
+1B;PolskiMis
+1B;PolskiMis
+1B;WFKoz
+1B;WFKoz
+1B;GeografiaKul
+1B;POMni
+1B;InformatykaKar
+1B;InformatykaKar
+1C;MatematykaBan
+1C;MatematykaBan
+1C;PolskiOrz
+1C;PolskiOrz
+1C;WFKoz
+1C;WFKoz
+1C;GeografiaKul
+1C;POSud
+1C;InformatykaKar
+1C;InformatykaKar
+1D;MatematykaBan
+1D;MatematykaBan
+1D;PolskiOrz
+1D;PolskiOrz
+1D;WFHos
+1D;WFHos
+1D;GeografiaKul
+1D;POSud
+1D;InformatykaKar
+1D;InformatykaKar
+2A;MatematykaKop
+2A;MatematykaKop
+2A;PolskiMis
+2A;PolskiMis
+2A;WFKoz
+2A;BiologiaBal
+2A;ChemiaKlo
+2A;FizykaHel
+2A;InformatykaBan
+2B;MatematykaKop
+2B;MatematykaKop
+2B;PolskiMis
+2B;PolskiMis
+2B;WFKoz
+2B;BiologiaBal
+2B;ChemiaKlo
+2B;FizykaHel
+2B;InformatykaBan
+2C;MatematykaBan
+2C;MatematykaBan
+2C;PolskiOrz
+2C;PolskiOrz
+2C;WFKoz
+2C;BiologiaBal
+2C;ChemiaKlo
+2C;FizykaKop
+2C;InformatykaKar
+2D;MatematykaBan
+2D;MatematykaBan
+2D;PolskiOrz
+2D;PolskiOrz
+2D;WFKoz
+2D;BiologiaBal
+2D;ChemiaKlo
+2D;FizykaKop
+2D;InformatykaKar
+3A;MatematykaKop
+3A;MatematykaKop
+3A;PolskiMis
+3A;BiologiaBal
+3A;ChemiaKlo
+3A;GeografiaKul
+3A;FizykaHel
+3A;FizykaHel
+3A;RosyjskiWas
+3B;MatematykaKop
+3B;MatematykaKop
+3B;PolskiMis
+3B;BiologiaBal
+3B;ChemiaKlo
+3B;GeografiaKul
+3B;FizykaHel
+3B;FizykaHel
+3B;RosyjskiWas
+3C;MatematykaBan
+3C;MatematykaBan
+3C;PolskiOrz
+3C;BiologiaBal
+3C;ChemiaKlo
+3C;GeografiaKul
+3C;FizykaHel
+3C;FizykaHel
+3C;RosyjskiWas
+3D;MatematykaBan
+3D;MatematykaBan
+3D;PolskiOrz
+3D;BiologiaBal
+3D;ChemiaKlo
+3D;GeografiaKul
+3D;FizykaHel
+3D;FizykaHel
+3D;RosyjskiWas
