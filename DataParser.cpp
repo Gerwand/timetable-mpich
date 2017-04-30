@@ -49,8 +49,8 @@ DataParser::getResources(DataResources& resources, DataTuples& tuples)
           split(line, ';', columns);
 
           string& name = columns[0];
-          Teacher* teacher = resources.getTeacher().get(columns[1]);
-          Room* room = resources.getRoom().get(columns[2]);
+          const Teacher* teacher = resources.getTeacher().get(columns[1]);
+          const Room* room = resources.getRoom().get(columns[2]);
 
           if (teacher == nullptr) {
             cout << "Teacher " << columns[1] << " not existing - subject "
@@ -70,8 +70,8 @@ DataParser::getResources(DataResources& resources, DataTuples& tuples)
           vector<string> columns;
           split(line, ';', columns);
 
-          Class* classObj = resources.getClass().get(columns[0]);
-          Subject* subject = resources.getSubject().get(columns[1]);
+          const Class* classObj = resources.getClass().get(columns[0]);
+          const Subject* subject = resources.getSubject().get(columns[1]);
           if (classObj == nullptr) {
             cout << "Subject " << columns[1] << " not existing - class "
                  << columns[0] << endl;

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Resource.h"
+#include "DataTuples.h"
+#include "CustomFunctions.h"
 #include <list>
 
 typedef std::list<const DataTuple *> Tuples;
@@ -8,10 +10,17 @@ typedef std::list<const DataTuple *> Tuples;
 class Period
 {
 public:
-	const Tuples& getTuples() { return _tuples; }
-	void addTuple(const DataTuple *tuple) { _tuples.push_back(tuple); }
+	std::vector<int>& getTuplesIDs() { return _tuplesIDs; }
+	const std::vector<int>& getTuplesIDs() const { return _tuplesIDs; }
+	void addTuple(int tupleID) { _tuplesIDs.push_back(tupleID); }
 
-	int getClashes();
+	int getClashes(const DataTuples& tuples);
 private:
-	Tuples _tuples;
+	std::vector<int> _tuplesIDs;
 };
+
+inline std::ostream&
+operator<<(std::ostream& stream, const Period& period)
+{
+	return stream << period.getTuplesIDs();
+}

@@ -7,8 +7,6 @@ class DataTuples : public ContainerWrapper<DataTuple>
 public:
   void getIdVector(std::vector<int>& ids) const;
 
-private:
-  DataTuple* get(const std::string& name) const { return nullptr; }
 };
 
 inline void

@@ -12,8 +12,11 @@ public:
 
   void add(T* res) { _res.push_back(res); }
 
-  T* get(const std::string& name) const;
-  T* get(int id) const;
+  const T* get(const std::string& name) const;
+  const T* get(int id) const;
+
+  T* get(const std::string& name);
+  T* get(int id);
 
 private:
   std::vector<T*> _res;
@@ -21,7 +24,7 @@ private:
 
 template <typename T>
 inline T*
-ContainerWrapper<T>::get(const std::string& name) const
+ContainerWrapper<T>::get(const std::string& name)
 {
   typename std::vector<T*>::const_iterator it;
 
@@ -36,6 +39,36 @@ ContainerWrapper<T>::get(const std::string& name) const
 
 template <typename T>
 inline T*
+ContainerWrapper<T>::get(int id)
+{
+  typename std::vector<T*>::const_iterator it;
+
+  for (it = _res.begin(); it != _res.end(); ++it) {
+    T* res = *it;
+    if (res->getId() == id)
+      return res;
+  }
+
+  return nullptr;
+}
+
+template <typename T>
+inline const T*
+ContainerWrapper<T>::get(const std::string& name) const
+{
+  typename std::vector<T*>::const_iterator it;
+
+  for (it = _res.begin(); it != _res.end(); ++it) {
+    T* res = *it;
+    if (std::string(res->getName()) == name)
+      return res;
+  }
+
+  return nullptr;
+}
+
+template <typename T>
+inline const T*
 ContainerWrapper<T>::get(int id) const
 {
   typename std::vector<T*>::const_iterator it;
@@ -48,6 +81,7 @@ ContainerWrapper<T>::get(int id) const
 
   return nullptr;
 }
+
 
 template <typename T>
 inline ContainerWrapper<T>::~ContainerWrapper()

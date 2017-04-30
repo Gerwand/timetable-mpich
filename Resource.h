@@ -88,20 +88,19 @@ class Subject : public Resource
 public:
   friend std::ostream& operator<<(std::ostream& out, const Subject& sub);
 
-  Subject(const std::string& name, Teacher* teacher, Room* room);
-  Subject();
+  Subject(const std::string& name, const Teacher* teacher, const Room* room);
 
-  Teacher* getTeacher() const { return _teacher; }
-  Room* getRoom() const { return _room; }
+  const Teacher* getTeacher() const { return _teacher; }
+  const Room* getRoom() const { return _room; }
 
 private:
-  Teacher* _teacher;
-  Room* _room;
+  const Teacher* _teacher;
+  const Room* _room;
 
   static int _nextId;
 };
 
-inline Subject::Subject(const std::string& name, Teacher* teacher, Room* room)
+inline Subject::Subject(const std::string& name, const Teacher* teacher, const Room* room)
   : Resource(_nextId++, name)
   , _teacher(teacher)
   , _room(room)
@@ -122,19 +121,19 @@ class DataTuple : public Resource
 public:
   friend std::ostream& operator<<(std::ostream& out, const DataTuple& tuple);
 
-  DataTuple(Class* classObj, Subject* subject);
+  DataTuple(const Class* classObj, const Subject* subject);
 
-  Class* getClass() const { return _class; }
-  Subject* getSubject() const { return _subject; }
+  const Class* getClass() const { return _class; }
+  const Subject* getSubject() const { return _subject; }
 
 private:
-  Class* _class;
-  Subject* _subject;
+  const Class* _class;
+  const Subject* _subject;
 
   static int _nextId;
 };
 
-inline DataTuple::DataTuple(Class* classObj, Subject* subject)
+inline DataTuple::DataTuple(const Class* classObj, const Subject* subject)
   : Resource(_nextId++, "")
   , _class(classObj)
   , _subject(subject)
