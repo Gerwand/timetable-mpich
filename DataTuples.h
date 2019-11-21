@@ -5,17 +5,16 @@
 class DataTuples : public ContainerWrapper<DataTuple>
 {
   public:
-	void getIdVector(std::vector<int> &ids) const;
+    void getIdVector(std::vector<int>& ids) const;
 };
 
 inline void
-DataTuples::getIdVector(std::vector<int> &ids) const
+DataTuples::getIdVector(std::vector<int>& ids) const
 {
-	std::vector<DataTuple *>::const_iterator it;
+    std::vector<DataTuple*>::const_iterator it;
 
-	for (it = getVector().begin(); it != getVector().end(); ++it)
-	{
-		DataTuple *tuple = *it;
-		ids.push_back(tuple->getId());
-	}
+    for (it = getVector().begin(); it != getVector().end(); ++it) {
+        DataTuple* tuple = *it;
+        ids.push_back(tuple->getId());
+    }
 }

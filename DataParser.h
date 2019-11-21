@@ -11,21 +11,21 @@
 class DataParser
 {
   public:
-	DataParser(std::string file) { _inputData.open(file); }
-	~DataParser() { _inputData.close(); }
+    DataParser(std::string file) { _inputData.open(file); }
+    ~DataParser() { _inputData.close(); }
 
-	int getResources(DataResources &resources, DataTuples &tuples);
+    int getResources(DataResources& resources, DataTuples& tuples);
 
   private:
-	enum DataType
-	{
-		UNKNOWN,
-		CLASSES,
-		TEACHERS,
-		ROOMS,
-		SUBJECTS,
-		TUPLES
-	};
+    enum DataType
+    {
+        UNKNOWN,
+        CLASSES,
+        TEACHERS,
+        ROOMS,
+        SUBJECTS,
+        TUPLES
+    };
 
-	std::ifstream _inputData;
+    std::ifstream _inputData;
 };

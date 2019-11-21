@@ -4,114 +4,113 @@
 
 #include <vector>
 
-typedef std::vector<Timetable *> Timetables;
+typedef std::vector<Timetable*> Timetables;
 
 class Population
 {
   public:
-	Population(const Population &population);
-	Population(const Timetables &timetables);
-	Population(){};
-	~Population();
+    Population(const Population& population);
+    Population(const Timetables& timetables);
+    Population(){};
+    ~Population();
 
-	const Population &operator=(const Population &population);
-	const Population &operator=(const Timetables &timetables);
+    const Population& operator=(const Population& population);
+    const Population& operator=(const Timetables& timetables);
 
-	const Timetables &getPopulation() { return _timetables; }
+    const Timetables& getPopulation() { return _timetables; }
 
-	void addIndividual(Timetable *individual);
-	void initRandom(size_t size);
-	bool hasExtincted() { return _timetables.size() < minimumPopulationSize; }
-	void clear();
+    void addIndividual(Timetable* individual);
+    void initRandom(size_t size);
+    bool hasExtincted() { return _timetables.size() < minimumPopulationSize; }
+    void clear();
 
-	static void setDataTuples(const DataTuples *tuples);
-	void getParents(Timetable *&parent1, Timetable *&parent2);
-	static bool mate(const Timetable *parent1, const Timetable *parent2,
-					 Timetable &child);
+    static void setDataTuples(const DataTuples* tuples);
+    void getParents(Timetable*& parent1, Timetable*& parent2);
+    static bool mate(const Timetable* parent1, const Timetable* parent2,
+                     Timetable& child);
 
-	double getPopulationFitness();
-	void printPopulation();
+    double getPopulationFitness();
+    void printPopulation();
 
-	static int maxFitness;
-	static int naturalSelection;
-	static int periodsNumber;
-	static size_t minimumPopulationSize;
+    static int maxFitness;
+    static int naturalSelection;
+    static int periodsNumber;
+    static size_t minimumPopulationSize;
 
   private:
-	Timetables _timetables;
-	static const DataTuples *_tuples;
-	static std::vector<int> _tuplesInd;
+    Timetables _timetables;
+    static const DataTuples* _tuples;
+    static std::vector<int> _tuplesInd;
 };
 
-inline Population::Population(const Population &population)
+inline Population::Population(const Population& population)
 {
-	*this = population;
+    *this = population;
 }
 
-inline Population::Population(const Timetables &timetables)
+inline Population::Population(const Timetables& timetables)
 {
-	*this = timetables;
+    *this = timetables;
 }
 
 inline Population::~Population()
 {
-	clear();
+    clear();
 }
 
-inline const Population &
-Population::operator=(const Population &population)
+inline const Population&
+Population::operator=(const Population& population)
 {
-	clear();
-	const Timetables &timetables = population._timetables;
+    clear();
+    const Timetables& timetables = population._timetables;
 
-	Timetables::const_iterator it;
-	for (it = timetables.begin(); it != timetables.end(); ++it)
-	{
-		_timetables.push_back(new Timetable(**it));
-	}
+    Timetables::const_iterator it;
+    for (it = timetables.begin(); it != timetables.end(); ++it) {
+        _timetables.push_back(new Timetable(**it));
+    }
 
-	return *this;
+    return *this;
 }
 
-inline const Population &
-Population::operator=(const Timetables &timetables)
+inline const Population&
+Population::operator=(const Timetables& timetables)
 {
-	clear();
-	_timetables = timetables;
+    clear();
+    _timetables = timetables;
 
-	return *this;
+    return *this;
 }
 
 inline void
 Population::clear()
 {
-	Timetables::iterator it;
-	for (it = _timetables.begin(); it != _timetables.end(); ++it)
-		delete *it;
+    Timetables::iterator it;
+    for (it = _timetables.begin(); it != _timetables.end(); ++it)
+        delete *it;
 
-	_timetables.clear();
+    _timetables.clear();
 }
 
 inline void
-Population::addIndividual(Timetable *individual)
+Population::addIndividual(Timetable* individual)
 {
-	_timetables.push_back(individual);
+    _timetables.push_back(individual);
 }
 
 inline void
-Population::setDataTuples(const DataTuples *tuples)
+Population::setDataTuples(const DataTuples* tuples)
 {
-	_tuples = tuples;
-	tuples->getIdVector(_tuplesInd);
+    _tuples = tuples;
+    tuples->getIdVector(_tuplesInd);
 }
 
 inline double
 Population::getPopulationFitness()
 {
-	Timetables::iterator it;
-	double totalFitness = 0.0;
-	for (it = _timetables.begin(); it != _timetables.end(); ++it)
-		totalFitness += (*it)->getFitness();
+    Timetables::iterator it;
+    double totalFitness = 0.0;
+    for (it = _timetables.begin(); it != _timetables.end(); ++it)
+        totalFitness += (*it)->getFitness();
 
-	return totalFitness /= _timetables.size();
+    return totalFitness /= _timetables.size();
 }
