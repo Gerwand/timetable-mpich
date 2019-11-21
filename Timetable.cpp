@@ -15,6 +15,19 @@ Timetable::getClashes(const DataTuples& tuples)
     return totalClashes;
 }
 
+int
+Timetable::getClashes(const DataTuplesMPI& tuples)
+{
+    int totalClashes = 0;
+
+    Periods::iterator it;
+
+    for (it = _periods.begin(); it != _periods.end(); ++it)
+        totalClashes += it->getClashes(tuples);
+
+    return totalClashes;
+}
+
 void
 Timetable::removeDuplicates()
 {

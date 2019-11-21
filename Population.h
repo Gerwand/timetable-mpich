@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Timetable.h"
-
+#include "ResourceMPI.h"
 #include <vector>
 
 typedef std::vector<Timetable*> Timetables;
@@ -24,7 +24,8 @@ class Population
     bool hasExtincted() { return _timetables.size() < minimumPopulationSize; }
     void clear();
 
-    static void setDataTuples(const DataTuples* tuples);
+    static void setDataTuples(const DataTuplesMPI* tuplesMPI = nullptr,
+                              const DataTuples* tuples = nullptr);
     void getParents(Timetable*& parent1, Timetable*& parent2);
     static bool mate(const Timetable* parent1, const Timetable* parent2,
                      Timetable& child);
@@ -40,6 +41,7 @@ class Population
   private:
     Timetables _timetables;
     static const DataTuples* _tuples;
+    static const DataTuplesMPI* _tuplesMPI;
     static std::vector<int> _tuplesInd;
 };
 
@@ -98,10 +100,15 @@ Population::addIndividual(Timetable* individual)
 }
 
 inline void
-Population::setDataTuples(const DataTuples* tuples)
+Population::setDataTuples(const DataTuplesMPI* tuplesMPI, const DataTuples* tuples)
 {
+    _tuplesMPI = _tuplesMPI;
     _tuples = tuples;
-    tuples->getIdVector(_tuplesInd);
+
+    if (tuples != nullptr)
+        tuples->getIdVector(_tuplesInd);
+    else if (tuplesMPI != nullptr)
+        _tuples->getIdVector(_tuplesInd);
 }
 
 inline double

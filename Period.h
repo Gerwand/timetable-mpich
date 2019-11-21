@@ -3,6 +3,8 @@
 #include "CustomFunctions.h"
 #include "DataTuples.h"
 #include "Resource.h"
+#include "ResourceMPI.h"
+
 #include <list>
 
 typedef std::list<const DataTuple*> Tuples;
@@ -17,6 +19,7 @@ class Period
 
     int getTuplesCount() const { return _tuplesIDs.size(); }
     int getClashes(const DataTuples& tuples);
+    int getClashes(const DataTuplesMPI& tuples);
 
   private:
     std::vector<int> _tuplesIDs;

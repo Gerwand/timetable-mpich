@@ -18,6 +18,7 @@ class Timetable
     const Periods& getPeriods() const { return _periods; }
     int getPeriodsCount() const { return _periods.size(); }
     int getClashes(const DataTuples& tuples);
+    int getClashes(const DataTuplesMPI& tuples);
     int getFitness() const { return _fitness; }
 
     void mutate();

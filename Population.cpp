@@ -3,12 +3,12 @@
 using namespace std;
 
 const DataTuples* Population::_tuples;
+const DataTuplesMPI* Population::_tuplesMPI;
 std::vector<int> Population::_tuplesInd;
 int Population::maxFitness = 50;
 int Population::naturalSelection = 0;
 int Population::periodsNumber = 40;
 size_t Population::minimumPopulationSize = 2;
-
 
 void
 Population::initRandom(size_t size)
@@ -42,7 +42,11 @@ Population::initRandom(size_t size)
             period->addTuple(*it);
             ++it;
         }
-        int fitness = maxFitness - timetable.getClashes(*_tuples);
+        int fitness;
+        if (_tuples != nullptr)
+            fitness = maxFitness - timetable.getClashes(*_tuples);
+        else
+            fitness = maxFitness - timetable.getClashes(*_tuplesMPI);
         timetable.setFitness(fitness);
     }
 }
@@ -99,7 +103,12 @@ Population::mate(const Timetable* parent1, const Timetable* parent2,
     // Restore state
     child.fillMissing(_tuplesInd);
 
-    int clashes = child.getClashes(*_tuples);
+    int clashes;
+    if (_tuples != nullptr)
+        clashes = child.getClashes(*_tuples);
+    else
+        clashes = child.getClashes(*_tuplesMPI);
+
     int fitness = maxFitness - clashes;
     child.setFitness(fitness);
 
