@@ -2,13 +2,14 @@
 
 using namespace std;
 
-const DataTuples* Population::_tuples;
-const DataTuplesMPI* Population::_tuplesMPI;
+const DataTuples* Population::_tuples = nullptr;
+const DataTuplesMPI* Population::_tuplesMPI = nullptr;
 std::vector<int> Population::_tuplesInd;
-int Population::maxFitness = 50;
+int Population::maxFitness = 100;
 int Population::naturalSelection = 0;
 int Population::periodsNumber = 40;
 size_t Population::minimumPopulationSize = 2;
+Sprng* Population::_stream;
 
 void
 Population::initRandom(size_t size)
@@ -55,10 +56,10 @@ void
 Population::getParents(Timetable*& parent1, Timetable*& parent2)
 {
     // RANDOM
-    int p1 = rand() % _timetables.size();
+    int p1 = _stream->isprng() % _timetables.size();
     int p2;
     do {
-        p2 = rand() % _timetables.size();
+        p2 = _stream->isprng() % _timetables.size();
     } while (p1 == p2);
 
     parent1 = _timetables[p1];
@@ -84,7 +85,7 @@ Population::mate(const Timetable* parent1, const Timetable* parent2,
         if (maxSize == 0)
             break;
         // RAND
-        size_t crossoverSite = rand() % maxSize;
+        size_t crossoverSite = _stream->isprng() % maxSize;
 
         const vector<int>& idp1 = itp1->getTuplesIDs();
         const vector<int>& idp2 = itp2->getTuplesIDs();
@@ -99,7 +100,7 @@ Population::mate(const Timetable* parent1, const Timetable* parent2,
     // Mutate
     child.mutate();
     // Remove duplicates
-    child.removeDuplicates();
+    child.removeDuplicates(_tuplesInd);
     // Restore state
     child.fillMissing(_tuplesInd);
 

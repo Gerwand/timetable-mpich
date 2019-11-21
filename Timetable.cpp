@@ -2,6 +2,8 @@
 
 using namespace std;
 
+Sprng* Timetable::_stream;
+
 int
 Timetable::getClashes(const DataTuples& tuples)
 {
@@ -29,26 +31,31 @@ Timetable::getClashes(const DataTuplesMPI& tuples)
 }
 
 void
-Timetable::removeDuplicates()
+Timetable::removeDuplicates(const std::vector<int>& ids)
 {
-    vector<int> foundIDs;
+    vector<vector<int>> foundIDs;
+    foundIDs.resize(ids.size());
     Periods::iterator itp;
-    for (itp = _periods.begin(); itp != _periods.end(); ++itp) {
+    int i = 0;
+    for (itp = _periods.begin(); itp != _periods.end(); ++itp, ++i) {
         vector<int>& tuples = itp->getTuplesIDs();
 
         vector<int>::iterator itt;
-        for (itt = tuples.begin(); itt != tuples.end(); ++itt) {
-            int id = *itt;
+        for (itt = tuples.begin(); itt != tuples.end(); ++itt)
+            foundIDs[(*itt) - 1].push_back(i);
+    }
 
-            auto found = std::find(foundIDs.begin(), foundIDs.end(), id);
+    for (size_t l = 0; l < foundIDs.size(); ++l) {
+        int occurences = foundIDs[l].size();
+        if (occurences <= 1)
+            continue;
 
-            if (found != foundIDs.end()) {
-                tuples.erase(itt);
-                --itt;
-            } else {
-                foundIDs.push_back(id);
-            }
-        }
+        int indRemove = _stream->isprng() % occurences;
+        int nPeriod = foundIDs[l][indRemove];
+        vector<int>& tuples = _periods[nPeriod].getTuplesIDs();
+        auto toRemove = find(tuples.begin(), tuples.end(), l + 1);
+
+        tuples.erase(toRemove);
     }
 }
 
@@ -80,29 +87,36 @@ Timetable::fillMissing(const std::vector<int>& ids)
         if (found == foundIDs.end() || *found != id) {
             // RAND
             int size = _periods.size();
-            int targetPeriod = rand() % size;
+            int targetPeriod = _stream->isprng() % size;
             _periods[targetPeriod].addTuple(id);
         }
     }
 }
-
+#include <assert.h>
 void
 Timetable::mutate()
 {
-    int srcPeriod = rand() % _periods.size();
-    int dstPeriod = rand() % _periods.size();
+    int srcPeriod;
+    int dstPeriod;
+    int tries = 10;
+    vector<int>* genes;
+    do {
+        int n1 = _stream->isprng();
+        int n2 = _stream->isprng();
 
-    if (srcPeriod == dstPeriod)
+        srcPeriod = n1 % _periods.size();
+        dstPeriod = n2 % _periods.size();
+        genes = &_periods[srcPeriod].getTuplesIDs();
+        if (!(--tries))
+            break;
+    } while (srcPeriod == dstPeriod || genes->empty());
+
+    if (srcPeriod == dstPeriod || genes->empty())
         return;
 
-    vector<int>& genes = _periods[srcPeriod].getTuplesIDs();
+    int srcGene = _stream->isprng() % genes->size();
 
-    if (genes.size() == 0)
-        return;
-    // RAND
-    int srcGene = rand() % genes.size();
-
-    int gene = genes[srcGene];
+    int gene = (*genes)[srcGene];
 
     _periods[dstPeriod].addTuple(gene);
 }
@@ -115,4 +129,30 @@ operator<<(std::ostream& stream, const Timetable& timetable)
     }
 
     return stream << endl;
+}
+
+void
+Timetable::printPretty(std::ostream& stream, const DataTuples& tuples)
+{
+    Periods::iterator itp;
+    int i = 0;
+
+    for (itp = _periods.begin(); itp != _periods.end(); ++itp, ++i) {
+        stream << "#Period " << i << ": " << endl;
+
+        const vector<int>& ids = itp->getTuplesIDs();
+        vector<int>::const_iterator iti;
+        for (iti = ids.begin(); iti != ids.end(); ++iti) {
+            const DataTuple* tuple = tuples.get(*iti);
+            const Class* classObj = tuple->getClass();
+            const Subject* subject = tuple->getSubject();
+            const Teacher* teacher = subject->getTeacher();
+            const Room* room = subject->getRoom();
+
+            stream << "\tClass: " << classObj->getName()
+                   << ", Subject: " << subject->getName()
+                   << ", Teacher: " << teacher->getName()
+                   << ", Room: " << room->getName() << endl;
+        }
+    }
 }

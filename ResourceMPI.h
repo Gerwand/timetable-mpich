@@ -2,9 +2,9 @@
 
 #include "DataTuples.h"
 #include "mpi.h"
+#include <iostream>
 #include <stddef.h>
 #include <vector>
-
 struct DataTupleMPI
 {
     int tupleID;
@@ -22,6 +22,7 @@ class DataTuplesMPI : public std::vector<DataTupleMPI>
     void pack(const DataTuples& tuples);
     int getTotalIntElements();
     void getIdVector(std::vector<int>& ids) const;
+    const DataTupleMPI* get(int id) const;
 };
 
 inline int
@@ -39,4 +40,18 @@ DataTuplesMPI::getIdVector(std::vector<int>& ids) const
         const DataTupleMPI& tuple = *it;
         ids.push_back(tuple.tupleID);
     }
+}
+
+inline const DataTupleMPI*
+DataTuplesMPI::get(int id) const
+{
+    const_iterator it;
+
+    for (it = begin(); it != end(); ++it) {
+        const DataTupleMPI* res = &(*it);
+        if (res->tupleID == id)
+            return res;
+    }
+
+    return nullptr;
 }

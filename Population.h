@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Timetable.h"
 #include "ResourceMPI.h"
+#include "Timetable.h"
 #include <vector>
 
 typedef std::vector<Timetable*> Timetables;
@@ -26,6 +26,7 @@ class Population
 
     static void setDataTuples(const DataTuplesMPI* tuplesMPI = nullptr,
                               const DataTuples* tuples = nullptr);
+    static void configure(int maxFitness, int periods, Sprng* stream);
     void getParents(Timetable*& parent1, Timetable*& parent2);
     static bool mate(const Timetable* parent1, const Timetable* parent2,
                      Timetable& child);
@@ -40,9 +41,11 @@ class Population
 
   private:
     Timetables _timetables;
+
     static const DataTuples* _tuples;
     static const DataTuplesMPI* _tuplesMPI;
     static std::vector<int> _tuplesInd;
+    static Sprng* _stream;
 };
 
 inline Population::Population(const Population& population)
@@ -100,15 +103,17 @@ Population::addIndividual(Timetable* individual)
 }
 
 inline void
-Population::setDataTuples(const DataTuplesMPI* tuplesMPI, const DataTuples* tuples)
+Population::setDataTuples(const DataTuplesMPI* tuplesMPI,
+                          const DataTuples* tuples)
 {
-    _tuplesMPI = _tuplesMPI;
+    _tuplesMPI = tuplesMPI;
     _tuples = tuples;
 
-    if (tuples != nullptr)
+    if (_tuples != nullptr) {
         tuples->getIdVector(_tuplesInd);
-    else if (tuplesMPI != nullptr)
-        _tuples->getIdVector(_tuplesInd);
+    } else if (_tuplesMPI != nullptr) {
+        _tuplesMPI->getIdVector(_tuplesInd);
+    }
 }
 
 inline double
@@ -120,4 +125,14 @@ Population::getPopulationFitness()
         totalFitness += (*it)->getFitness();
 
     return totalFitness /= _timetables.size();
+}
+
+inline void
+Population::configure(int maxFitness, int periods, Sprng* stream)
+{
+    Population::maxFitness = maxFitness;
+    Population::periodsNumber = periods;
+
+    _stream = stream;
+    Timetable::setStream(stream);
 }
