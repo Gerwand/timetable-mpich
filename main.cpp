@@ -49,7 +49,7 @@ int main()
 	Population::setDataTuples(&tuples);
 	Population oldGeneration;
 
-	oldGeneration.initRandom(10);
+	oldGeneration.initRandom(100);
 	const Timetables &tt = oldGeneration.getPopulation();
 	for (size_t i = 0; i < tt.size(); ++i)
 	{
@@ -61,35 +61,67 @@ int main()
 	cout << "fitness: " << oldGeneration.getPopulationFitness() << endl
 		 << endl;
 
-	Population newGeneration;
-	for (int i = 0; i < 100; ++i)
+	Population::naturalSelection = round(oldGeneration.getPopulationFitness());
+	int i = 0;
+	Timetable perfect(Population::periodsNumber);
+	bool idealny = false;
+	while (1)
 	{
-		Timetable *parent1, *parent2;
-		oldGeneration.getParents(parent1, parent2);
-		Timetable *child = new Timetable(parent1->getPeriodsCount());
+		cout << "Generation " << ++i << " population: " << oldGeneration.getPopulation().size() << endl;
 
-		bool alive = Population::mate(parent1, parent2, *child);
-		if (alive)
-			newGeneration.addIndividual(child);
-		if (child->getFitness() == Population::maxFitness)
-			cout << "Mamy idealny okaz!" << endl;
-	}
+		Population newGeneration;
+		for (int i = 0; i < 1000; ++i)
+		{
+			Timetable *parent1, *parent2;
+			oldGeneration.getParents(parent1, parent2);
+			Timetable *child = new Timetable(Population::periodsNumber);
 
-	
-  //const Timetables& ng = newGeneration.getPopulation();
+			bool alive = Population::mate(parent1, parent2, *child);
+			if (alive)
+			{
+				newGeneration.addIndividual(child);
+			}
+			if (child->getFitness() == Population::maxFitness)
+			{
+				cout << "Mamy idealny okaz!" << endl;
+				perfect = *child;
+				idealny = true;
+				break;
+			}
+		}
+		if (idealny)
+			break;
+		//const Timetables& ng = newGeneration.getPopulation();
 
-  /*
+		/*
   for (size_t i = 0; i < ng.size(); ++i) {
     cout << "Individual " << i << endl;
     cout << *(ng[i]) << endl;
     cout << "clashes: " << (*(ng[i])).getClashes(tuples) << endl;
   }
 */
-	if (newGeneration.hasExtincted())
-		cout << "Populacja wymarla" << endl;
-	else
-		cout << "fitness: " << newGeneration.getPopulationFitness() << endl
-			 << endl;
-
-	oldGeneration = newGeneration;
+		if (newGeneration.hasExtincted())
+		{
+			cout << "Populacja wymarla" << endl;
+			Population::naturalSelection--;
+			--i;
+			continue;
+		}
+		else
+		{
+			cout << "fitness: " << newGeneration.getPopulationFitness() << " natural selection: "
+				 << Population::naturalSelection << endl
+				 << endl;
+		}
+		if (newGeneration.getPopulationFitness() >= oldGeneration.getPopulationFitness())
+		{
+			cout << "Pomieniam generacje i zwiekszam selekcje" << endl;
+			Population::naturalSelection++;
+			oldGeneration = newGeneration;
+		}
+		else
+		{
+			--i;
+		}
+	}
 }

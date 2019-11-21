@@ -5,24 +5,24 @@ using namespace std;
 const DataTuples *Population::_tuples;
 std::vector<int> Population::_tuplesInd;
 int Population::maxFitness = 50;
-int Population::naturalSelection = 10;
-
+int Population::naturalSelection = 0;
+int Population::periodsNumber = 40;
+size_t Population::minimumPopulationSize = 2;
 void Population::initRandom(size_t size)
 {
-	size_t nperiods = 30;
-	size_t tuplesPerPeriod = _tuplesInd.size() / (nperiods);
-	size_t rest = _tuplesInd.size() - nperiods * tuplesPerPeriod;
+	size_t tuplesPerPeriod = _tuplesInd.size() / periodsNumber;
+	size_t rest = _tuplesInd.size() - periodsNumber * tuplesPerPeriod;
 	for (size_t i = 0; i < size; ++i)
 	{
 		vector<int> curTuples = _tuplesInd;
 		vector<int>::iterator it = curTuples.begin();
 		random_shuffle(curTuples.begin(), curTuples.end());
 
-		_timetables.push_back(new Timetable(nperiods));
+		_timetables.push_back(new Timetable(periodsNumber));
 		Timetable &timetable = *_timetables.back();
 		Period *period = nullptr;
 		int n = -1;
-		for (size_t k = 0; k < nperiods * tuplesPerPeriod; ++k)
+		for (size_t k = 0; k < periodsNumber * tuplesPerPeriod; ++k)
 		{
 			if (k % tuplesPerPeriod == 0)
 			{
@@ -76,6 +76,9 @@ bool Population::mate(const Timetable *parent1, const Timetable *parent2,
 		 itp1 != periods1.end(); ++itp1, ++itp2, ++itc)
 	{
 		int maxSize = max(itp1->getTuplesCount(), itp2->getTuplesCount());
+
+		if (maxSize == 0)
+			break;
 		// RAND
 		size_t crossoverSite = rand() % maxSize;
 

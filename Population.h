@@ -21,7 +21,7 @@ class Population
 
 	void addIndividual(Timetable *individual);
 	void initRandom(size_t size);
-	bool hasExtincted() { return _timetables.size() == 0; }
+	bool hasExtincted() { return _timetables.size() < minimumPopulationSize; }
 	void clear();
 
 	static void setDataTuples(const DataTuples *tuples);
@@ -34,6 +34,9 @@ class Population
 
 	static int maxFitness;
 	static int naturalSelection;
+	static int periodsNumber;
+	static size_t minimumPopulationSize;
+
   private:
 	Timetables _timetables;
 	static const DataTuples *_tuples;

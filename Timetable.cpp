@@ -88,6 +88,10 @@ void Timetable::mutate()
 		return;
 
 	vector<int> &genes = _periods[srcPeriod].getTuplesIDs();
+
+	if (genes.size() == 0)
+		return;
+	// RAND
 	int srcGene = rand() % genes.size();
 
 	int gene = genes[srcGene];
